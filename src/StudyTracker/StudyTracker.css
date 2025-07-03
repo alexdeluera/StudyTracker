@@ -29,19 +29,48 @@ body {
     gap: 10px;
     background-color: #f2c399;
     padding: 10px;
-    width: 80%;
+    width: 100vw;
     height: 80vh;
-    border-radius: 10px;
 }
 
 .sidebar {
     grid-row: 1 / span 2;
     background-color: #ffe0c4;
     border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Stronger shadow to give it depth */
     display: flex;
     flex-direction: column;
 }
 
+.middle-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Pushes image to top, achievements to bottom */
+    background-color: #ffe0c4;
+    border-radius: 10px;
+    padding: 10px;
+    height: 75vh;
+}
+
+.image-container {
+    flex-grow: 1;
+    border-radius: 10px;
+    min-height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.achievements-bar {
+    background-color: #e53935;
+    color: white;
+    width: 100%;
+    text-align: center;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 10px;
+}
 
 .main {
     position: relative;
@@ -51,43 +80,25 @@ body {
     width: 100vw;
 }
 
-.footer {
-    background-color: #e53935;
-    color: white;
-    text-align: center;
-    border-radius: 5px;
-    font-weight: bold;
-    cursor: pointer;
-    overflow: hidden;
-    transition: max-height 0.3s ease;
-}
-
-.footer.collapsed {
-    max-height: 40px;
-}
-
-.footer:not(.collapsed) {
-    max-height: 200px;
-}
-
-.footer-header {
-    padding: 10px;
-}
-
-.footer-content {
-    padding: 10px;
-}
-
 .widgets {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    width: 100%; /* Or a fixed width if you want */
+    box-sizing: border-box;
+    display: flex; /* If you want them side-by-side, otherwise block is fine */
+    flex-direction: column; /* If stacking vertically */
+    gap: 10px; /* Optional spacing between widgets */
 }
 
 .widget {
-    background-color: #ffe0c4;
+    background-color: #ffe0c4; /* This is the same as your sidebar. Change to a more visible color if needed */
     border-radius: 10px;
-    height: 45%;
+    width: 100%;
+    height: 100%;
+    margin-bottom: 10px;  /* Space between widgets */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Stronger shadow to give it depth */
+    display: flex;
+    overflow: hidden; /* Prevents children from bleeding out */
+    flex-direction: column;
+    min-height: 150px;  /* Optional: to make it feel like a block even if it's empty */
 }
 
 .header {

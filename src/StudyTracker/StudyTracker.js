@@ -11,32 +11,37 @@ const StudyTracker = () => {
         <div className="tracker-page-container">
             <Navbar />
 
-            <div class="dashboard">
-                <div class ="sidebar">
+            <div className="dashboard">
+                <div className ="sidebar">
                     <div class="header">To-Do List</div>
                 </div>
 
-                <div class="widgets">
+                <div className="middle-column">
+                    <div className="image-container">
+                        {/* You can insert an image later here */}
+                    </div>
+                    <div className="achievements-bar">
+                        Achievements + Statistics
+                    </div>
+                </div>    
+
+                <div className="widgets">
+
                 <div class="widget">
                     <div class="header">Calendar</div>
                 </div>
+
                 <div class="widget">
                     <div class="header">Pomodoro</div>
                 </div>
+                
+                
             </div>
             </div>
 
             <div class="main">
             </div>
 
-            <div class="footer collapsible collapsed" id="footer">
-                <div class="footer-header" id="footerHeader">Achievements + Statistics</div>
-                <div class="footer-content" id="footerContent">
-                    Content goes here later =u=
-                </div>
-            </div>
-
-            
 
             <Footer />
 
