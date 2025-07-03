@@ -44,6 +44,15 @@ const Navbar = () => {
           <div className="header-option-text">Sign In</div>
         </div>
 
+        <div
+          className="header-option-container"
+          onClick={() => {
+            navigate(`/studytracker`);
+          }}
+        >
+          <div className="header-option-text">Study Tracker</div>
+        </div>
+
       </div>
     </div>
   );

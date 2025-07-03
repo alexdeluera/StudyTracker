@@ -1,6 +1,8 @@
-import "./StudyTracker.css";
+import { useState, useRef, useEffect } from "react";
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
+import "../Home/Home.css";
+import "./StudyTracker.css";
 
 const StudyTracker = () => {
     
@@ -13,10 +15,18 @@ const StudyTracker = () => {
                 <div class ="sidebar">
                     <div class="header">To-Do List</div>
                 </div>
+
+                <div class="widgets">
+                <div class="widget">
+                    <div class="header">Calendar</div>
+                </div>
+                <div class="widget">
+                    <div class="header">Pomodoro</div>
+                </div>
+            </div>
             </div>
 
             <div class="main">
-            <img src="blank" alt="bolCover" class="" id="placeholder"/>
             </div>
 
             <div class="footer collapsible collapsed" id="footer">
@@ -26,14 +36,7 @@ const StudyTracker = () => {
                 </div>
             </div>
 
-            <div class="widgets">
-                <div class="widget">
-                    <div class="header">Calendar</div>
-                </div>
-                <div class="widget">
-                    <div class="header">Pomodoro</div>
-                </div>
-            </div>
+            
 
             <Footer />
 
