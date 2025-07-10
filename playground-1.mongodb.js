@@ -13,35 +13,31 @@
 use('mongodbVSCodePlaygroundDB');
 
 // Insert a few documents into the sales collection.
-db.getCollection('UsersTesting').insertMany([
-  { 'firstName': 'Bri', 'lastName': 'Harris', 'class': 'CEN3031', 'grade': 100 },
-  { 'firstName': 'Alex', 'lastName': 'De Luera', 'class': 'CEN3031','grade': 100 },
-  { 'firstName': 'Aravind', 'lastName': 'Ithikka', 'class': 'CEN3031','grade': 100 },
-  { 'firstName': 'Alyssa', 'lastName': 'Williams', 'class': 'CEN3031','grade': 100 },
-
+db.getCollection('sales').insertMany([
+  { 'item': 'abc', 'price': 10, 'quantity': 2, 'date': new Date('2014-03-01T08:00:00Z') },
+  { 'item': 'jkl', 'price': 20, 'quantity': 1, 'date': new Date('2014-03-01T09:00:00Z') },
+  { 'item': 'xyz', 'price': 5, 'quantity': 10, 'date': new Date('2014-03-15T09:00:00Z') },
+  { 'item': 'xyz', 'price': 5, 'quantity': 20, 'date': new Date('2014-04-04T11:21:39.736Z') },
+  { 'item': 'abc', 'price': 10, 'quantity': 10, 'date': new Date('2014-04-04T21:23:13.331Z') },
+  { 'item': 'def', 'price': 7.5, 'quantity': 5, 'date': new Date('2015-06-04T05:08:13Z') },
+  { 'item': 'def', 'price': 7.5, 'quantity': 10, 'date': new Date('2015-09-10T08:43:00Z') },
+  { 'item': 'abc', 'price': 10, 'quantity': 5, 'date': new Date('2016-02-06T20:20:13Z') },
 ]);
 
-// Insert a few documents into the course collection.
-db.getCollection('CEN3031').insertMany([
-  { 'AssignmentType': 'Homework','moduleNumber': 1,'AssignmentName': 'Homework1', 'Submitted': 'yes', 'PossiblePoints': 20,'PointsReceived' :18, 'dueDate': new Date('2025-06-01T00:00:00Z') },
-  { 'AssignmentType': 'Homework','moduleNumber': 2, 'AssignmentName': 'Homework2','Submitted': 'no', 'PossiblePoints': 20,'PointsReceived' :null, 'dueDate': new Date('2025-06-02T00:00:00Z') },
-]);
-
-// Run a find command to view assignments due between June 1st and June 2nd, 2025.
-const assignmentsDueJune1 = db.getCollection('CEN3031').find({
-  dueDate: { $gte: new Date('2025-06-01'), $lt: new Date('2025-06-02') }
+// Run a find command to view items sold on April 4th, 2014.
+const salesOnApril4th = db.getCollection('sales').find({
+  date: { $gte: new Date('2014-04-04'), $lt: new Date('2014-04-05') }
 }).count();
 
 // Print a message to the output window.
-console.log(`${assignmentsDueJune1} assignments due June 1st and June 2nd`);
+console.log(`${salesOnApril4th} sales occurred in 2014.`);
 
 // Here we run an aggregation and open a cursor to the results.
 // Use '.toArray()' to exhaust the cursor to return the whole result set.
 // You can use '.hasNext()/.next()' to iterate through the cursor page by page.
-db.getCollection('UsersTesting').aggregate([
-  { $match: { class: 'CEN3031' }}]);
-  //   // Find all of the sales that occurred in 2014.
-//   { $match: { class: { $gte: new Date('2014-01-01'), $lt: new Date('2015-01-01') } } },
-//   // Group the total sales for each product.
-//   { $group: { _id: '$item', totalSaleAmount: { $sum: { $multiply: [ '$price', '$quantity' ] } } } }
-// ]);
+db.getCollection('sales').aggregate([
+  // Find all of the sales that occurred in 2014.
+  { $match: { date: { $gte: new Date('2014-01-01'), $lt: new Date('2015-01-01') } } },
+  // Group the total sales for each product.
+  { $group: { _id: '$item', totalSaleAmount: { $sum: { $multiply: [ '$price', '$quantity' ] } } } }
+]);
