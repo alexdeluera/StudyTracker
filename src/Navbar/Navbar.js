@@ -44,7 +44,7 @@ const Navbar = () => {
           <div className="header-option-text">Sign In</div>
         </div>
 
-          {/* For testing only, will eventually be removed */}
+          {/* For testing only (to line 64), will eventually be removed */}
         <div
           className="header-option-container"
           onClick={() => {
@@ -52,6 +52,15 @@ const Navbar = () => {
           }}
         >
           <div className="header-option-text">Study Tracker</div>
+        </div>
+
+        <div
+          className="header-option-container"
+          onClick={() => {
+            navigate(`/pomodoro`);
+          }}
+        >
+          <div className="header-option-text">Pomodoro</div>
         </div>
 
       </div>

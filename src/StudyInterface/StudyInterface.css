@@ -67,7 +67,7 @@ body {
 
 .add-dropdown {
     position: absolute;
-    background: white;
+    background: gray;
     border: 1px solid #ccc;
     top: 100%;
     right: 10px;
@@ -82,7 +82,7 @@ body {
 }
 
 .add-dropdown div:hover {
-    background: #eee;
+    background: lightgrey;
 }
 
 .folder-form {
