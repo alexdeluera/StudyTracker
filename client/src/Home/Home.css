@@ -1,3 +1,9 @@
+/* This section is global, be very careful what we add here */
+/* Currently, this just hides the scrollbar for cleanliness */
+* {
+  scrollbar-width: none;
+}
+
 body {
     overflow-x: hidden;
 }
@@ -12,6 +18,10 @@ body {
 
 #heroImage{
     width: 100%;
+    display: block;
+    margin: 0;
+    padding: 0;
+    border-top: 2px solid #000000;
 }
 
 .home-picture { 
@@ -28,6 +38,7 @@ body {
     text-align: center;
     width: 70vw;
     margin-bottom: 10px;
+    margin-top: 10px;
 }
 
 .desc-header{
