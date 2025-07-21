@@ -131,6 +131,39 @@ const StudyTracker = () => {
         );
     };
 
+     const palettes = {
+        default: {
+            "--background": "#ffffff",
+            "--primary": "#f2c399",
+            "--secondary": "#ffe0c4",
+            "--header-bg": "#e53935",
+            "--text-color": "#000",
+            "--accent": "#4caf50"
+        },
+        dark: {
+            "--background": "#121212",
+            "--primary": "#1e1e1e",
+            "--secondary": "#2c2c2c",
+            "--header-bg": "#bb86fc",
+            "--text-color": "#ffffff",
+            "--accent": "#03dac6"
+        },
+        cool: {
+            "--background": "#e0f7fa",
+            "--primary": "#b2ebf2",
+            "--secondary": "#80deea",
+            "--header-bg": "#00acc1",
+            "--text-color": "#004d40",
+            "--accent": "#00796b"
+        }
+    };
+
+    const applyPalette = (palette) => {
+        Object.entries(palette).forEach(([key, value]) => {
+            document.documentElement.style.setProperty(key, value);
+        });
+    };
+
     return (
         <div className="page-container">
             <NavUser />
@@ -337,12 +370,23 @@ const StudyTracker = () => {
                 <div className="middle-column">
                     <div className="image-container"></div>
                     <div className="achievements-bar" onClick={toggleAchievements}>
-                        Achievements + Statistics
+                        Achievement Tracker
                     </div>
                     {showAchievements && (
                         <div className="achievements-content">
                             <p>⭐ You completed 3 Pomodoros today!</p>
                             <p>📈 Your focus time increased by 12%</p>
+                            <div className="palette-swatch-container">
+                                    {Object.entries(palettes).map(([name, palette]) => (
+                                        <div
+                                            key={name}
+                                            className="palette-swatch"
+                                            style={{ backgroundColor: palette["--accent"] }}
+                                            onClick={() => applyPalette(palette)}
+                                            title={name}
+                                        ></div>
+                                    ))}
+                                </div>
                         </div>
                     )}
                 </div>

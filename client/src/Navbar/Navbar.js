@@ -43,7 +43,6 @@ const Navbar = () => {
         >
           <div className="header-option-text">Sign In</div>
         </div>
-<<<<<<< HEAD:src/Navbar/Navbar.js
 
         <div
           className="header-option-container"
@@ -54,8 +53,6 @@ const Navbar = () => {
           <div className="header-option-text">Study Tracker</div>
         </div>
 
-=======
->>>>>>> 76795ac0569fe9fbcdec2f9a7608d14f17325f20:client/src/Navbar/Navbar.js
       </div>
     </div>
   );
