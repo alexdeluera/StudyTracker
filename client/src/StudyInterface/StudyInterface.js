@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Navbar from "../Navbar/Navbar";
+import NavUser from "../NavUser/NavUser";
 import Footer from "../Footer/Footer";
 import "../Home/Home.css";
 import "./StudyInterface.css";
@@ -132,8 +132,8 @@ const StudyTracker = () => {
     };
 
     return (
-        <div className="tracker-page-container">
-            <Navbar />
+        <div className="page-container">
+            <NavUser />
 
             <div className="dashboard">
                 <div className="sidebar">
@@ -357,9 +357,10 @@ const StudyTracker = () => {
                 </div>
             </div>
 
-            <div className="main"></div>
+            {/* <div className="main"></div> */}
             <Footer />
         </div>
+        
     );
 };
 
