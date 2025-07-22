@@ -53,8 +53,13 @@
   position: relative;
 }
 
-.add-toggle {
+.button-group {
   margin-left: auto;
+  display: flex;
+  gap: 8px;
+}
+
+.add-toggle {
   font-size: 20px;
   background: white;
   border: none;
@@ -218,6 +223,15 @@
 .due-date-label {
   font-size: 0.75rem;
   color: #666;
+}
+
+.priority-tag {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-left: 8px;
+  cursor: pointer;
+  display: inline-block;
 }
 
 .task-buttons {
