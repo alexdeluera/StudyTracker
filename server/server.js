@@ -36,12 +36,13 @@ app.use('/register', require('./routes/register'));
 app.use('/auth', require('./routes/auth'));
 app.use('/refresh', require('./routes/refresh')); //refresh token might not be needed
 app.use('/logout', require('./routes/logout')); //refresh token might not be needed
-app.use("/courses", require("./routes/courses"));
+//app.use("/courses", require("./routes/courses"));
 
 
 //need a valid session and JWT Token for all routes below
 app.use(validateJWTToken)
-app.use('/tasks', require('./routes/api/tasks'))
+app.use("/courses", require("./routes/courses"));
+app.use('/tasks', require('./routes/api/tasks')) //not in use yet
 
 //backend server running on port 5000, client server (REACT) will be running on port 3000
 //We dont want to listen for requests if we dont connect to mongoose
