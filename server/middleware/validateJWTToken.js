@@ -11,6 +11,7 @@ const verifyJWT = (req, res, next) => {
             if (err) return res.sendStatus(403); //invalid token
             req.user = decoded.UserInfo.username;
             req.roles = decoded.UserInfo.roles; //roles added to JWT payload in authController
+            req.userId = decoded.UserInfo.id;
             next();
         }
     )

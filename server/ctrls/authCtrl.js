@@ -18,6 +18,7 @@ const handleLogin = async (req, res) => {
             //pass in a payload
             {
                 "UserInfo": {
+                    "id": foundUser._id,
                     "email": foundUser.email,
                     "roles": roles
                 }
