@@ -9,6 +9,7 @@ import Pomodoro from '../Pomodoro/Pomodoro';
 import Admin from '../Admin/Admin';
 import './App.css';
 
+
 function App() {
 
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/team" exact element={<Team />} />
         <Route path="/signin" exact element={<SignIn />} />
         <Route path="/register" exact element={<Register />} />
+        
         <Route path="/study" exact element={<Study />} />
         <Route path="/pomodoro" exact element={<Pomodoro />} />
         <Route path="/admin" exact element={<Admin />} />

@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import NavUser from "../NavUser/NavUser";
 import Footer from "../Footer/Footer";
 import "../Home/Home.css";
@@ -8,23 +9,48 @@ const StudyTracker = () => {
     const [showAchievements, setShowAchievements] = useState(false);
     const toggleAchievements = () => setShowAchievements(prev => !prev);
 
-    const [expandedFolderId, setExpandedFolderId] = useState(null);
-    const [folders, setFolders] = useState([]);
-    const [selectedFolderId, setSelectedFolderId] = useState(null);
+    const [expandedCourseId, setExpandedCourseId] = useState(null);
+    const [courses, setCourses] = useState([]);
+    const [selectedCourseId, setSelectedCourseId] = useState(null);
 
     const [draggedTaskInfo, setDraggedTaskInfo] = useState(null); // { folderId, taskIndex }
-    const [draggedFolderIndex, setDraggedFolderIndex] = useState(null);
+    const [draggedCourseIndex, setDraggedCourseIndex] = useState(null);
 
     const [showAddMenu, setShowAddMenu] = useState(false);
-    const [showFolderForm, setShowFolderForm] = useState(false);
+    const [showCourseForm, setShowCourseForm] = useState(false);
     const [showTaskForm, setShowTaskForm] = useState(false);
 
-    const [newFolderColor, setNewFolderColor] = useState("#ffb3b3");
-    const [newFolderName, setNewFolderName] = useState("");
+    const [newCourseNumber, setNewCourseNumber] = useState("");
+
+
+
+    const [newCourseColor, setNewCourseColor] = useState("#ffb3b3");
+    const [newCourseName, setNewCourseName] = useState("");
     const [newTask, setNewTask] = useState("");
     const [editIndex, setEditIndex] = useState(null);
     const [taskDeadline, setTaskDeadline] = useState("");
     const [taskStartDate, setTaskStartDate] = useState("");
+
+
+    useEffect(() => {
+        const token = localStorage.getItem("accessToken");
+        if (!token) return; // or redirect to /signin
+
+        axios.get("http://localhost:5000/courses", {
+            headers: { Authorization: `Bearer ${token}` }
+  })
+        .then(res => {
+            setCourses(res.data.map(c => ({
+                id:     c._id,
+                number: c.number,
+                name:   c.name,
+                color:  "#ffb3b3",
+                tasks:  []
+    })));
+  })
+        .catch(err => console.error("Load courses failed", err));
+}, []);
+
 
     const calculateProgress = (startDate, deadline) => {
         const start = new Date(startDate);
@@ -56,13 +82,47 @@ const StudyTracker = () => {
         if (dayDiff === 1) return "Due tomorrow";
         return `${dayDiff} days left`;
     };
+    
+    
+  const createCourse = () => {
+  if (!newCourseNumber.trim() || !newCourseName.trim()) return;
+
+  const token = localStorage.getItem("accessToken");
+  axios.post(
+    "http://localhost:5000/courses",
+    {
+      number: newCourseNumber.trim(),
+      name:   newCourseName.trim()
+    },
+    { headers: { Authorization: `Bearer ${token}` } }
+  )
+  .then(res => {
+    const c = res.data;
+    setCourses(cs => [
+      ...cs,
+      { id: c._id, number: c.number, name: c.name, color: newCourseColor, tasks: [] }
+    ]);
+    // reset form
+    setNewCourseNumber("");
+    setNewCourseName("");
+    setNewCourseColor("#ffb3b3");
+    setShowCourseForm(false);
+  })
+  .catch(console.error);
+};
+
+
+
+
+
+
 
     const addTask = () => {
-        if (!newTask.trim() || !selectedFolderId) return;
+        if (!newTask.trim() || !selectedCourseId) return;
 
-        setFolders(folders.map(folder => {
-            if (folder.id === selectedFolderId) {
-                const updatedTasks = [...folder.tasks];
+        setCourses(courses.map(course => {
+            if (course.id === selectedCourseId) {
+                const updatedTasks = [...course.tasks];
 
                 if (editIndex !== null) {
                     updatedTasks[editIndex] = {
@@ -80,9 +140,9 @@ const StudyTracker = () => {
                     });
                 }
 
-                return { ...folder, tasks: updatedTasks };
+                return { ...course, tasks: updatedTasks };
             }
-            return folder;
+            return course;
         }));
 
         setNewTask("");
@@ -92,41 +152,41 @@ const StudyTracker = () => {
         setShowTaskForm(false);
     };
 
-    const toggleComplete = (folderId, index) => {
-        setFolders(prev =>
-            prev.map(folder =>
-                folder.id === folderId
+    const toggleComplete = (courseId, index) => {
+        setCourses(prev =>
+            prev.map(course =>
+                course.id === courseId
                     ? {
-                        ...folder,
-                        tasks: folder.tasks.map((task, i) =>
+                        ...course,
+                        tasks: course.tasks.map((task, i) =>
                             i === index ? { ...task, completed: !task.completed } : task
                         ),
                     }
-                    : folder
+                    : course
             )
         );
     };
 
-    const editTask = (folderId, index) => {
-        const folder = folders.find(f => f.id === folderId);
-        if (!folder) return;
-        setNewTask(folder.tasks[index].text);
-        setTaskDeadline(folder.tasks[index].deadline || "");
-        setTaskStartDate(folder.tasks[index].startDate || "");
+    const editTask = (courseId, index) => {
+        const course = courses.find(c => c.id === courseId);
+        if (!course) return;
+        setNewTask(course.tasks[index].text);
+        setTaskDeadline(course.tasks[index].deadline || "");
+        setTaskStartDate(course.tasks[index].startDate || "");
         setEditIndex(index);
-        setSelectedFolderId(folderId);
+        setSelectedCourseId(courseId);
         setShowTaskForm(true);
     };
 
-    const deleteTask = (folderId, index) => {
-        setFolders(prev =>
-            prev.map(folder =>
-                folder.id === folderId
+    const deleteTask = (courseId, index) => {
+        setCourses(prev =>
+            prev.map(course =>
+                course.id === courseId
                     ? {
-                        ...folder,
-                        tasks: folder.tasks.filter((_, i) => i !== index),
+                        ...course,
+                        tasks: course.tasks.filter((_, i) => i !== index),
                     }
-                    : folder
+                    : course
             )
         );
     };
@@ -142,17 +202,17 @@ const StudyTracker = () => {
                         <button className="add-toggle" onClick={() => setShowAddMenu(!showAddMenu)}>+</button>
                         {showAddMenu && (
                             <div className="add-dropdown">
-                                <div onClick={() => { setShowFolderForm(true); setShowTaskForm(false); setShowAddMenu(false); }}>
-                                    📁 Add Folder
+                                <div onClick={() => { setShowCourseForm(true); setShowTaskForm(false); setShowAddMenu(false); }}>
+                                    📁 Add Course
                                 </div>
-                                <div onClick={() => { setShowTaskForm(true); setShowFolderForm(false); setShowAddMenu(false); }}>
+                                <div onClick={() => { setShowTaskForm(true); setShowCourseForm(false); setShowAddMenu(false); }}>
                                     ➕ Add Task
                                 </div>
                             </div>
                         )}
                     </div>
 
-                    {showTaskForm && selectedFolderId && (
+                    {showTaskForm && selectedCourseId && (
                         <div className="todo-input">
                             <input
                                 type="text"
@@ -177,92 +237,100 @@ const StudyTracker = () => {
                         </div>
                     )}
 
-                    {showFolderForm && (
-                        <div className="folder-form">
+                    {showCourseForm && (
+                        <div className="course-form">
+                            <input
+                                type ="text"
+                                placeholder="Course number"
+                                value={newCourseNumber}
+                                onChange={e => setNewCourseNumber(e.target.value)}
+                            />
+
                             <input
                                 type="text"
-                                placeholder="Folder name"
-                                value={newFolderName}
-                                onChange={(e) => setNewFolderName(e.target.value)}
+                                placeholder="Course name"
+                                value={newCourseName}
+                                onChange={(e) => setNewCourseName(e.target.value)}
                             />
                             <input
                                 type="color"
-                                value={newFolderColor}
-                                onChange={(e) => setNewFolderColor(e.target.value)}
+                                value={newCourseColor}
+                                onChange={(e) => setNewCourseColor(e.target.value)}
                             />
-                            <button
-                                onClick={() => {
-                                    if (!newFolderName.trim()) return;
-                                    const newFolder = {
+                            <button 
+                                onClick={createCourse}
+                               /* onClick={() => {
+                                    if (!newCourseName.trim()) return;
+                                    const newCourse = {
                                         id: Date.now(),
-                                        name: newFolderName.trim(),
-                                        color: newFolderColor,
+                                        name: newCourseName.trim(),
+                                        color: newCourseColor,
                                         tasks: []
                                     };
-                                    setFolders([...folders, newFolder]);
-                                    setNewFolderName("");
-                                    setNewFolderColor("#ffb3b3");
-                                    setShowFolderForm(false);
-                                }}
+                                    setCourses([...courses, newCourse]);
+                                    setNewCourseName("");
+                                    setNewCourseColor("#ffb3b3");
+                                    setShowCourseForm(false);
+                                }}*/
                             >
                                 Create
                             </button>
                         </div>
                     )}
 
-                    <ul className="folder-list">
-                        {folders.map((folder, folderIndex) => (
+                    <ul className="Course-list">
+                        {courses.map((course, courseIndex) => (
                             <li
-                                key={folder.id}
-                                className="folder-item"
+                                key={course.id}
+                                className="course-item"
                                 draggable
-                                onDragStart={() => setDraggedFolderIndex(folderIndex)}
+                                onDragStart={() => setDraggedCourseIndex(courseIndex)}
                                 onDragOver={(e) => e.preventDefault()}
                                 onDrop={(e) => {
                                     e.preventDefault();
-                                    if (draggedFolderIndex === null || draggedFolderIndex === folderIndex) return;
+                                    if (draggedCourseIndex === null || draggedCourseIndex === courseIndex) return;
 
                                     const bounding = e.currentTarget.getBoundingClientRect();
                                     const offset = e.clientY - bounding.top;
                                     const dropBefore = offset < bounding.height / 2;
-                                    const newIndex = dropBefore ? folderIndex : folderIndex + 1;
+                                    const newIndex = dropBefore ? courseIndex : courseIndex + 1;
 
-                                    const updated = [...folders];
-                                    const [moved] = updated.splice(draggedFolderIndex, 1);
+                                    const updated = [...courses];
+                                    const [moved] = updated.splice(draggedCourseIndex, 1);
 
                                     // Adjust newIndex if moving forward in the list
-                                    const adjustedIndex = newIndex > draggedFolderIndex ? newIndex - 1 : newIndex;
+                                    const adjustedIndex = newIndex > draggedCourseIndex ? newIndex - 1 : newIndex;
 
                                     updated.splice(adjustedIndex, 0, moved);
 
-                                    setFolders(updated);
-                                    setDraggedFolderIndex(null);
+                                    setCourses(updated);
+                                    setDraggedCourseIndex(null);
                                 }}
-                                onDragEnd={() => setDraggedFolderIndex(null)}
+                                onDragEnd={() => setDraggedCourseIndex(null)}
                             >
                                 <div
-                                    className="folder-header"
+                                    className="course-header"
                                     onClick={() => {
-                                        setExpandedFolderId(prev => prev === folder.id ? null : folder.id);
-                                        setSelectedFolderId(folder.id);
+                                        setExpandedCourseId(prev => prev === course.id ? null : course.id);
+                                        setSelectedCourseId(course.id);
                                     }}
                                     style={{
-                                        backgroundColor: folder.id === expandedFolderId ? "#e3f2fd" : "#f5f5f5",
-                                        borderLeft: `10px solid ${folder.color}`,
+                                        backgroundColor: course.id === expandedCourseId ? "#e3f2fd" : "#f5f5f5",
+                                        borderLeft: `10px solid ${course.color}`,
                                     }}
                                 >
-                                    {folder.name}
+                                    {course.number} - {course.name}
                                 </div>
 
-                                {expandedFolderId === folder.id && (
+                                {expandedCourseId === course.id && (
                                     <ul className="todo-list">
-                                        {folder.tasks.map((task, index) => (
+                                        {course.tasks.map((task, index) => (
                                             <li
                                                 key={index}
                                                 className={task.completed ? "completed" : ""}
-                                                style={{ borderLeft: `6px solid ${folder.color}` }}
+                                                style={{ borderLeft: `6px solid ${course.color}` }}
                                                 draggable
-                                                onDragStart={() => setDraggedTaskInfo({ folderId: folder.id, taskIndex: index })}
+                                                onDragStart={() => setDraggedTaskInfo({ courseId: course.id, taskIndex: index })}
                                                 onDragOver={(e) => e.preventDefault()}
                                                 onDrop={(e) => {
                                                     e.preventDefault();
@@ -273,31 +341,31 @@ const StudyTracker = () => {
                                                     const dropBefore = offset < bounding.height / 2;
                                                     const newIndex = dropBefore ? index : index + 1;
 
-                                                    setFolders(prevFolders => {
+                                                    setCourses(prevCourses => {
                                                         // Clone the entire folders array
-                                                        const updatedFolders = prevFolders.map(f => ({
-                                                            ...f,
-                                                            tasks: [...f.tasks]
+                                                        const updatedCourses = prevCourses.map(c => ({
+                                                            ...c,
+                                                            tasks: [...c.tasks]
                                                         }));
 
-                                                        const sourceFolder = updatedFolders.find(f => f.id === draggedTaskInfo.folderId);
-                                                        const targetFolder = updatedFolders.find(f => f.id === folder.id);
+                                                        const sourceCourse = updatedCourses.find(c => c.id === draggedTaskInfo.courseId);
+                                                        const targetCourse = updatedCourses.find(c => c.id === course.id);
 
-                                                        if (!sourceFolder || !targetFolder) return prevFolders;
+                                                        if (!sourceCourse || !targetCourse) return prevCourses;
 
                                                         // Remove the moved task from the source folder tasks
-                                                        const [movedTask] = sourceFolder.tasks.splice(draggedTaskInfo.taskIndex, 1);
+                                                        const [movedTask] = sourceCourse.tasks.splice(draggedTaskInfo.taskIndex, 1);
 
                                                         // Adjust insertion index if moving down within the same folder
                                                         let adjustedIndex = newIndex;
-                                                        if (folder.id === draggedTaskInfo.folderId && newIndex > draggedTaskInfo.taskIndex) {
+                                                        if (course.id === draggedTaskInfo.courseId && newIndex > draggedTaskInfo.taskIndex) {
                                                             adjustedIndex = newIndex - 1;
                                                         }
 
-                                                        // Insert moved task at the new index in target folder
-                                                        targetFolder.tasks.splice(adjustedIndex, 0, movedTask);
+                                                        // Insert moved task at the new index in target course
+                                                        targetCourse.tasks.splice(adjustedIndex, 0, movedTask);
 
-                                                        return updatedFolders;
+                                                        return updatedCourses;
                                                     });
 
                                                     setDraggedTaskInfo(null);
@@ -307,7 +375,7 @@ const StudyTracker = () => {
                                                 <input
                                                     type="checkbox"
                                                     checked={task.completed}
-                                                    onChange={() => toggleComplete(folder.id, index)}
+                                                    onChange={() => toggleComplete(course.id, index)}
                                                 />
                                                 <span>{task.text}</span>
                                                 {task.deadline && task.startDate && (
@@ -322,8 +390,8 @@ const StudyTracker = () => {
                                                     </div>
                                                 )}
                                                 <div className="task-buttons">
-                                                    <button onClick={() => editTask(folder.id, index)}>✏️</button>
-                                                    <button onClick={() => deleteTask(folder.id, index)}>❌</button>
+                                                    <button onClick={() => editTask(course.id, index)}>✏️</button>
+                                                    <button onClick={() => deleteTask(course.id, index)}>❌</button>
                                                 </div>
                                             </li>
                                         ))}

@@ -22,6 +22,7 @@ function SignIn() {
         if (roles && roles.Admin) {
           navigate("/admin");
         } else {
+          localStorage.setItem("accessToken", result.data.accessToken);
           navigate("/study");
         }
       } else {
