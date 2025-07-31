@@ -36,7 +36,7 @@ const Home = () => {
             </div>
 
             <div className="home-picture">
-                <img src="main_pomodoro.png" alt="bolCover" className="" id="heroImage" />
+                <img src={`${process.env.PUBLIC_URL}/main_pomodoro.png`} alt="bolCover" className="" id="heroImage" />
             </div>
 
 

@@ -13,7 +13,7 @@ const Footer = () => {
 
             <div id="socials">
                 <a href="https://github.com/alexdeluera/StudyTracker">
-                    <img src="github_logo.png" id="socials"></img>
+                    <img src={`${process.env.PUBLIC_URL}/github_logo.png`} id="socials"></img>
                 </a>
             </div> 
         </div>

@@ -17,7 +17,7 @@ const NavAdmin = () => {
     <div className="header-container">
       <div className="logo-container">
         <img
-          src="StudyTrackerIcon.png"
+          src={`${process.env.PUBLIC_URL}/StudyTrackerIcon.png`}
           className="logo"
           onClick={() => window.open("https://github.com/alexdeluera/StudyTracker", "_blank")}
           alt="StudyTracker Icon"
