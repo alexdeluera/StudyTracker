@@ -24,6 +24,8 @@ hs_err_pid*
 replay_pid*
 node_modules
 node_modules/
+build/
+build
 
 .vscode/
 
