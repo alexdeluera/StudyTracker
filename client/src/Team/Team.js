@@ -18,7 +18,7 @@ const Team = () => {
     
           target="_blank"
         >
-          <img className="img" src={`${process.env.PUBLIC_URL}/headshot/Alex.png`} alt="Alex Picture" />
+          <img className="img" src={`${process.env.PUBLIC_URL}/Headshot/Alex.png`} alt="Alex Picture" />
           <div className="credit-name">Alex De Luera</div>
           <div className="credit-title">Project Manager</div>
         </a>
@@ -28,7 +28,7 @@ const Team = () => {
           href="https://www.linkedin.com/in/bri-harris/"
           target="_blank"
         >
-          <img className="img" src={`${process.env.PUBLIC_URL}/headshot/Bri.png`} alt="Bri Picture" />
+          <img className="img" src={`${process.env.PUBLIC_URL}/Headshot/Bri.png`} alt="Bri Picture" />
           <div className="credit-name">Bri Harris</div>
           <div className="credit-title">Scrum Master</div>
         </a>
@@ -38,7 +38,7 @@ const Team = () => {
           href="https://www.linkedin.com/in/aravind-ithikkat-024246150/"
           target="_blank"
         >
-          <img className="img" src={`${process.env.PUBLIC_URL}/headshot/Aravind.jpg`} alt="Aravind Picture" />
+          <img className="img" src={`${process.env.PUBLIC_URL}/Headshot/Aravind.jpg`} alt="Aravind Picture" />
           <div className="credit-name">Aravind Ithikkat</div>
           <div className="credit-title">Backend Developer</div>
         </a>
@@ -48,7 +48,7 @@ const Team = () => {
           href="https://www.linkedin.com/in/alyssa-williams-848878221/"
           target="_blank"
         >
-          <img className="img" src={`${process.env.PUBLIC_URL}/headshot/Alyssa.jpg`} alt="Alyssa Picture" />
+          <img className="img" src={`${process.env.PUBLIC_URL}/Headshot/Alyssa.jpg`} alt="Alyssa Picture" />
           <div className="credit-name">Alyssa Williams</div>
           <div className="credit-title">Frontend Developer</div>
         </a>
